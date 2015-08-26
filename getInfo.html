@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link type='text/css' href='css/basic.css' rel='stylesheet' media='screen' />
+
+    <style type="text/css">
+      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+      div.leffBottom{
+        background-color: #fff;
+        border : 2px solid #fff;
+        border-radius : 3px;
+        box-shadow : 0 2px 6px rgba(0,0,0,.3);
+        cursor : pointer;
+        margin-bottom : 22px;
+        text-align : center;
+      }
+      div.rightBottom{
+        cursor : pointer;
+        margin-bottom : 16px;
+        margin-right : 24px;
+        text-align : center;
+        color: #000;
+      }
+      #map-info i{
+        color:blue;
+      }
+      #map-info i:hover{
+        color:red;
+      }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi8eFTWLyyRQFvEWwf6W0tTZgKinMHO5g">
+    </script>
+    <script type="text/javascript">
+
+    function bindInfoWindow(marker, map, infoWindow, html) {
+      google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, marker);
+      });
+    }
+
+    function CenterControl(controlDiv, map, controlText, className, title) {
+
+      // Set CSS for the control border
+      var controlUI = document.createElement('div');
+      controlUI.title = title;
+      $(controlUI).addClass(className);
+      controlDiv.appendChild(controlUI);
+
+      // Set CSS for the control interior
+      //var controlText =;
+      controlUI.appendChild(controlText);
+
+    }
+
+
+
+      function initialize() {
+            var mapOptions = {
+              center: new google.maps.LatLng(9.932963,-84.180588),
+              //zoom:22,
+              zoom:13,
+              minZoom:9,
+              streetViewControl:false,
+              mapTypeControl: false
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+          var strictBounds = new google.maps.LatLngBounds(
+              new google.maps.LatLng(8.19,-85.19),
+              new google.maps.LatLng(11.19, -83.19)
+           );
+            google.maps.event.addListener(map, 'rightclick', function(e) {
+              alert("'X'=>" + e.latLng.lat().toFixed(6) + ", 'Y'=>" + e.latLng.lng().toFixed(6)+',' );
+            });
+           // Listen for the dragend event
+           google.maps.event.addListener(map, 'center_changed', function() {
+             if (strictBounds.contains(map.getCenter())) return;
+
+             // We're out of bounds - Move the map back within the bounds
+
+             var c = map.getCenter(),
+                 x = c.lng(),
+                 y = c.lat(),
+                 maxX = strictBounds.getNorthEast().lng(),
+                 maxY = strictBounds.getNorthEast().lat(),
+                 minX = strictBounds.getSouthWest().lng(),
+                 minY = strictBounds.getSouthWest().lat();
+
+             if (x < minX) x = minX;
+             if (x > maxX) x = maxX;
+             if (y < minY) y = minY;
+             if (y > maxY) y = maxY;
+
+             map.setCenter(new google.maps.LatLng(y, x));
+           });
+           //map.data.loadGeoJson('santaAnaCompleto.geojson');
+
+          var mascaraCanton = new google.maps.Data();
+          //data1.loadGeoJson('santaAnaCompleto.geojson');
+          mascaraCanton.loadGeoJson('canton.geojson');
+          // do the same for data2, data3 or whatever
+          // create some layer control logic for turning on data1
+          //1mascaraCanton.setMap(map); // or restyle or whatever
+
+          mascaraDistrito = new google.maps.Data();
+
+          var centerControlDiv = document.createElement('div');
+          var centerControl = new CenterControl(centerControlDiv, map, document.getElementById('map-selector-distrito'), 'leffBottom','Seleccionar un distrio');
+
+          centerControlDiv.index = 1;
+          map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlDiv);
+
+          var centerControlDiv1 = document.createElement('div');
+          var centerControl1 = new CenterControl(centerControlDiv1, map, document.getElementById('map-info'),'rightBottom','Obtener más información');
+
+          centerControlDiv1.index = 1;
+          map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerControlDiv1);
+
+
+          var infoWindow = new google.maps.InfoWindow;
+
+
+
+
+
+            /*if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(initialLocation);
+            });*/
+      }
+    $(document).ready(
+      function()
+      {
+        google.maps.event.addDomListener(window, 'load', initialize);
+        var opciones = $("#map-selector-distrito li");
+
+        google.maps.event.addDomListener(opciones[0], 'click', function() {
+          //map.setCenter( new google.maps.LatLng(9.932963,-84.180588) );
+          mascaraDistrito.setMap(null);
+        //  map.setZoom(12);
+          map.panTo( new google.maps.LatLng( $(opciones[0]).data("centerx"), $(this).data("centery") ) );
+          //map.setZoom(13);
+
+          //map.setZoom(zoomActual);
+
+
+        });
+
+        opciones.splice(0,2);
+        opciones.each( function(index){
+
+                google.maps.event.addDomListener(this, 'click', function() {
+                  //map.setCenter( new google.maps.LatLng(9.932963,-84.180588) );
+                  var zoomActual = map.getZoom();
+                  mascaraDistrito.setMap(null);
+                  mascaraDistrito = new google.maps.Data();
+                  mascaraDistrito.loadGeoJson( $(this).data("distrito")+'.geojson' );
+                  mascaraDistrito.setMap(map);
+                //  map.setZoom(12);
+                  map.panTo( new google.maps.LatLng( $(this).data("centerx"), $(this).data("centery") ) );
+                  //map.setZoom(13);
+
+                  //map.setZoom(zoomActual);
+
+
+                });
+
+        } );
+
+
+
+      }
+    );
+
+    </script>
+  </head>
+  <body>
+  <div id="map-canvas"></div>
+  <div class="dropup" id="map-selector-distrito">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Seleccionar Sector
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <li data-distrito="noseleccion" data-centerX='9.929962' data-centerY='-84.174285'><a href="#">TODO EL CANTÓN</a></li>
+      <li role="separator" class="divider"></li>
+      <li data-distrito="santaana" data-centerX='9.929962' data-centerY='-84.174285' data-zoom='15'>Santa Ana Centro</li>
+      <li data-distrito="salitral" data-centerX='9.895551' data-centerY='-84.170809' data-zoom='14'>Salitral</li>
+      <li data-distrito="pozos" data-centerX="9.953295" data-centerY="-84.189605" data-zoom="14">Pozos</li>
+      <li data-distrito="lauruca" data-centerX='9.921677' data-centerY='-84.192524' data-zoom='14'>La Uruca</li>
+      <li data-distrito="piedades" data-centerX='9.916097' data-centerY='-84.210463' data-zoom='14'>Piedades</li>
+      <li data-distrito="brasil" data-centerX='9.938839' data-centerY='-84.229045' data-zoom='15'>Brasil</li>
+    </ul>
+  </div>
+  <div id="map-info"><i class="fa fa-info-circle fa-3x"></i></div>
+  <!-- modal content -->
+  <div id="basic-modal-content">
+    <div><a href="http://ucr.ac.cr" target="_blank"><img src="img/ucr.gif" width="50%"/></a><img src="img/santaana.png" width="50%"/></div>
+    <p>Realizado como parte del Trabajo Comunal Universitario por Erick Madrigal R&iacute;os</p>
+  </div>
+
+  <!-- preload the images -->
+  <div style='display:none'>
+    <img src='img/basic/x.png' alt='' />
+  </div>
+  <!-- Load jQuery, SimpleModal and Basic JS files -->
+  <script type='text/javascript' src='js/jquery.simplemodal.1.4.4.min.js'></script>
+  <script type='text/javascript' src='js/basic.js'></script>
+  <!--script type="text/javascript" src="js/creacionpuntos.js"></script> -->
+
+  </body>
+</html>
