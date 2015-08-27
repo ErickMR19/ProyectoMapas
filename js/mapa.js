@@ -1,12 +1,9 @@
-function ListaArrays(){
-
-}
-ListaArrays.prototype.insertar = function(objeto,type) {
-    if( this[type] == undefined ){
-      this[type] = new Array(objeto);
+Array.prototype.insertar = function(objeto,indice) {
+    if( this[indice] == undefined ){
+      this[indice] = new Array(objeto);
     }
     else{
-      this[type].push(objeto);
+      this[indice].push(objeto);
     }
 };
 marcadores = new Array();
@@ -87,7 +84,7 @@ function initialize() {
 
       var mascaraCanton = new google.maps.Data();
       //data1.loadGeoJson('santaAnaCompleto.geojson');
-      mascaraCanton.loadGeoJson('canton.geojson');
+      mascaraCanton.loadGeoJson('geometry/canton.geojson');
       // do the same for data2, data3 or whatever
       // create some layer control logic for turning on data1
       mascaraCanton.setMap(map); // or restyle or whatever
@@ -122,7 +119,6 @@ function initialize() {
            bindInfoWindow(marker, map, infoWindow, html);
 
          });
-         console.log(marcadores);
      })
      .fail(function() {
        alert( "error" );
@@ -177,7 +173,7 @@ $(document).ready(
               var zoomActual = map.getZoom();
               mascaraDistrito.setMap(null);
               mascaraDistrito = new google.maps.Data();
-              mascaraDistrito.loadGeoJson( $(this).data("distrito")+'.geojson' );
+              mascaraDistrito.loadGeoJson( 'geometry/'+$(this).data("distrito")+'.geojson' );
               mascaraDistrito.setMap(map);
             //  map.setZoom(12);
               map.panTo( new google.maps.LatLng( $(this).data("centerx"), $(this).data("centery") ) );
@@ -186,7 +182,6 @@ $(document).ready(
                 if(distritoSeleccionado == 0){
                   for (var type = 1; type < 7; ++type)
                   {
-                      console.log(marcadores);
                       if(type != index+1){
                         for(var i = 0; i < marcadores[type].length; ++i){
                           marcadores[type][i].setVisible(false);
