@@ -6,6 +6,8 @@ Array.prototype.insertar = function(objeto,indice) {
       this[indice].push(objeto);
     }
 };
+//Arreglo que contendra un arreglo en cada posicion correspondiente al distrito
+//en cada uno de estos se guardaran los marcadores localizados en cada distrito
 marcadores = new Array();
 for(var i = 0; i <7; ++i){
   marcadores[i] = new Array();
