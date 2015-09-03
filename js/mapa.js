@@ -14,9 +14,13 @@ for(var i = 0; i <7; ++i){
 }
 distritoSeleccionado = 0;
 
+//recibe un marcador (globito rojo), el mapa sobre el que se va a operar.
+//infoWindow se refiere a la ventana en donde se desplagarà la informaciòn
+//el html es el mensaje que va a mostrar
 function bindInfoWindow(marker, map, infoWindow, html) {
-  google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent(html);
+  google.maps.event.addListener(marker, 'click', function() { //Le decimos a google que cuando alguien haga clic sobre 
+  //un marcador haga lo que sigue.
+    infoWindow.setContent(html); //setea el texto
     infoWindow.open(map, marker);
   });
 }
