@@ -1,82 +1,110 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
-    <link type='text/css' href='css/basic.css' rel='stylesheet' media='screen' />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-    <style type="text/css">
-      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
-      div.leffBottom{
-        background-color: #fff;
-        border : 2px solid #fff;
-        border-radius : 3px;
-        box-shadow : 0 2px 6px rgba(0,0,0,.3);
-        cursor : pointer;
-        margin-bottom : 22px;
-        text-align : center;
-      }
-      div.rightBottom{
-        cursor : pointer;
-        margin-bottom : 16px;
-        margin-right : 24px;
-        text-align : center;
-        color: #000;
-      }
-      #map-info i{
-        color:blue;
-      }
-      #map-info i:hover{
-        color:red;
-      }
-    </style>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi8eFTWLyyRQFvEWwf6W0tTZgKinMHO5g">
-    </script>
-    <script type="text/javascript"
-      src="js/mapa.js" >
-    >
-    </script>
-  </head>
-  <body>
-  <div id="map-canvas"></div>
-  <div class="dropup" id="map-selector-distrito">
-    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Seleccionar Sector
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-      <li data-distrito="noseleccion" data-centerX='9.929962' data-centerY='-84.174285'><a href="#">TODO EL CANTÓN</a></li>
-      <li role="separator" class="divider"></li>
-      <li data-distrito="santaana" data-centerX='9.929962' data-centerY='-84.174285' data-zoom='15'>Santa Ana Centro</li>
-      <li data-distrito="salitral" data-centerX='9.895551' data-centerY='-84.170809' data-zoom='14'>Salitral</li>
-      <li data-distrito="pozos" data-centerX="9.953295" data-centerY="-84.189605" data-zoom="14">Pozos</li>
-      <li data-distrito="lauruca" data-centerX='9.921677' data-centerY='-84.192524' data-zoom='14'>La Uruca</li>
-      <li data-distrito="piedades" data-centerX='9.916097' data-centerY='-84.210463' data-zoom='14'>Piedades</li>
-      <li data-distrito="brasil" data-centerX='9.938839' data-centerY='-84.229045' data-zoom='15'>Brasil</li>
-    </ul>
-  </div>
-  <div id="map-info"><i class="fa fa-info-circle fa-3x"></i></div>
-  <!-- modal content -->
-  <div id="basic-modal-content">
-    <div><a href="http://ucr.ac.cr" target="_blank"><img src="img/ucr.gif" width="50%"/></a><img src="img/santaana.png" width="50%"/></div>
-    <p>Realizado como parte del Trabajo Comunal Universitario por Erick Madrigal Ríos</p>
-  </div>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link type='text/css' href='css/basic.css' rel='stylesheet' media='screen' />
 
-  <!-- preload the images -->
-  <div style='display:none'>
-    <img src='img/basic/x.png' alt='' />
-  </div>
-  <!-- Load jQuery, SimpleModal and Basic JS files -->
-  <script type='text/javascript' src='js/jquery.simplemodal.1.4.4.min.js'></script>
-  <script type='text/javascript' src='js/basic.js'></script>
-  <!--script type="text/javascript" src="js/creacionpuntos.js"></script> -->
+	<style type="text/css">
+		html,
+		body,
+		#map-canvas {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		
+		div.leffBottom {
+			background-color: #fff;
+			border: 2px solid #fff;
+			border-radius: 3px;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+			cursor: pointer;
+			margin-bottom: 22px;
+			text-align: center;
+		}
+		
+		div.rightBottom {
+			cursor: pointer;
+			margin-bottom: 16px;
+			margin-right: 24px;
+			text-align: center;
+			color: #000;
+		}
+		
+		#map-info i {
+			color: blue;
+		}
+		
+		#map-info i:hover {
+			color: red;
+		}
+	</style>
+	<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyBi8eFTWLyyRQFvEWwf6W0tTZgKinMHO5g">
+	</script>
+	<script type="text/javascript" src="js/mapa.js">
+		>
+	</script>
+</head>
 
-  </body>
+<body>
+	<div id="map-canvas"></div>
+	<div class="dropup" id="map-selector-distrito">
+		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Seleccionar Sector
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+			<li data-distrito="noseleccion" data-centerX='9.929962' data-centerY='-84.174285'><a href="#">TODO EL CANTÓN</a></li>
+			<li role="separator" class="divider"></li>
+			<li data-distrito="santaana" data-centerX='9.929962' data-centerY='-84.174285' data-zoom='15'>Santa Ana Centro</li>
+			<li data-distrito="salitral" data-centerX='9.895551' data-centerY='-84.170809' data-zoom='14'>Salitral</li>
+			<li data-distrito="pozos" data-centerX="9.953295" data-centerY="-84.189605" data-zoom="14">Pozos</li>
+			<li data-distrito="lauruca" data-centerX='9.921677' data-centerY='-84.192524' data-zoom='14'>La Uruca</li>
+			<li data-distrito="piedades" data-centerX='9.916097' data-centerY='-84.210463' data-zoom='14'>Piedades</li>
+			<li data-distrito="brasil" data-centerX='9.938839' data-centerY='-84.229045' data-zoom='15'>Brasil</li>
+		</ul>
+	</div>
+	<div class="dropup" id="map-selector-categoria">
+		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Seleccionar Categoría
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+			<li data-distrito="noseleccion" data-centerX='9.929962' data-centerY='-84.174285'><a href="#">MOSTRAR TODO</a></li>
+			<li role="separator" class="divider"></li>
+			<li data-distrito="santaana" data-centerX='9.929962' data-centerY='-84.174285' data-zoom='15'>Académico</li>
+			<li data-distrito="salitral" data-centerX='9.895551' data-centerY='-84.170809' data-zoom='14'>Comercio</li>
+			<li data-distrito="pozos" data-centerX="9.953295" data-centerY="-84.189605" data-zoom="14">Salud</li>
+			<li data-distrito="lauruca" data-centerX='9.921677' data-centerY='-84.192524' data-zoom='14'>Recreación</li>
+			<li data-distrito="piedades" data-centerX='9.916097' data-centerY='-84.210463' data-zoom='14'>Cultura</li>
+			<li data-distrito="brasil" data-centerX='9.938839' data-centerY='-84.229045' data-zoom='15'>Gobierno</li>
+		</ul>
+	</div>
+	<div id="map-info"><i class="fa fa-info-circle fa-3x"></i></div>
+	<!-- modal content -->
+	<div id="basic-modal-content">
+		<div>
+			<a href="http://ucr.ac.cr" target="_blank"><img src="img/ucr.gif" width="50%" /></a><img src="img/santaana.png" width="50%" /></div>
+		<p>Realizado como parte del Trabajo Comunal Universitario por Erick Madrigal Ríos</p>
+	</div>
+
+	<!-- preload the images -->
+	<div style='display:none'>
+		<img src='img/basic/x.png' alt='' />
+	</div>
+	<!-- Load jQuery, SimpleModal and Basic JS files -->
+	<script type='text/javascript' src='js/jquery.simplemodal.1.4.4.min.js'></script>
+	<script type='text/javascript' src='js/basic.js'></script>
+	<!--script type="text/javascript" src="js/creacionpuntos.js"></script> -->
+
+</body>
+
 </html>
