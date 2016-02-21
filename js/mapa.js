@@ -2,6 +2,7 @@
 /*global google*/
 /*global $*/
 /*global console*/
+/*global prompt*/
 
 
 Array.prototype.insertar = function (objeto, indice) {
@@ -14,11 +15,9 @@ Array.prototype.insertar = function (objeto, indice) {
 };
 //Arreglo que contendra un arreglo en cada posicion correspondiente al distrito
 //en cada uno de estos se guardaran los marcadores localizados en cada distrito
-var marcadores = [];
+var marcadores = [], marcadoresDistritos = [ [], [], [], [], [], [], [] ], marcadoresCategorias = [ [], [], [], [], [], [], [], [] ];
 var i;
-for (i = 0; i < 7; i += 1) {
-    marcadores[i] = [];
-}
+
 var distritoSeleccionado = 0;
 var infoWindow;
 
@@ -79,8 +78,24 @@ function initialize() {
     btnZoomPlus = $('#btn-zoom-plus');
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     google.maps.event.addListener(map, 'rightclick', function (e) {
-
-        console.log(distritoSeleccionado);
+        var nombre = prompt("Ingrese el nombre"), distrito = prompt("Ingrese el distrito"), categoria = prompt("Ingrese el categoria");
+        
+        /*array('X'=>9.930048,
+        'Y'=>-84.179911,
+        '' => 'Gimnasio Municipal',
+        
+        ''=>1,
+        'categoria' => 1
+       ) ,*/
+        console.log();
+        console.log("\n  array('X'=>" + e.latLng.lat().toFixed(6) + "," +
+                    "\n        'Y'=>" + e.latLng.lng().toFixed(6) + "," +
+                    "\n        'nombre'=> '" + nombre + "'," +
+                    "\n        'telefono' => '2282-8888'," +
+                    "\n        'distrito'=> " + distrito + "," +
+                    "\n        'categoria'=> " + categoria + "," +
+                    "\n       ) ,"
+                   );
     });
     google.maps.event.addListener(map, 'zoom_changed', function () {
         switch (map.getZoom()) {
@@ -159,21 +174,33 @@ function initialize() {
     /*global alert*/
     $.ajax("backend/datosmapa.php")
         .done(function (data) {
-            $(data).each(function () {
-                var html, point, marker;
+            var imageMarker = [ "img/markers/markercultura.png",
+                                "img/markers/markerdeporte.png",
+                                "img/markers/markereducacion.png",
+                                "img/markers/markersalud.png",
+                                "img/markers/markerbancos.png",
+                                "img/markers/markerrestaurantes.png",
+                                "img/markers/markerspublicos.png",
+                                "img/markers/markerautomotriz.png" ];
+            $(data).each(function (index) {
+                var html, point, marker, label;
                 html = "<b>" + this.nombre + "</b> <br/>" + this.telefono + "<br />" + this.categoria;
                 point = new google.maps.LatLng(this.X, this.Y);
-                //var image = 'markerMoney-64.png';
 
                 marker = new google.maps.Marker({
                     map: map,
                     position: point,
-                    title: this.nombre
-                    //icon: image
+                    title: this.nombre,
+                    //label: label,
+                    icon: imageMarker[this.categoria]
                 });
-                marcadores[this.distrito].push(marker);
+                marcadores[index] = {
+                    cont: 1,
+                    ref: marker
+                };
+                marcadoresDistritos[this.distrito].push(marcadores[index]);
+                marcadoresCategorias[this.categoria].push(marcadores[index]);
                 bindInfoWindow(marker, map, infoWindow, html);
-
             });
         })
         .fail(function () {
@@ -192,87 +219,133 @@ function initialize() {
         });
     }
 }
+var valorFiltro = 1;
+function disminuiryOcultar(element, index, array) {
+    "use strict";
+    element.cont -= 1;
+    element.ref.setVisible(false);
+}
+function aumentaryMostrar(element, index, array) {
+    "use strict";
+    element.cont += 1;
+    var mostar = (element.cont === valorFiltro) ? true : false;
+    element.ref.setVisible(mostar);
+}
+function mostrarTodo(element, index, array) {
+    "use strict";
+    if (element.cont === valorFiltro) {
+        element.ref.setVisible(true);
+    }
+}
+function ocultarTodo(element, index, array) {
+    "use strict";
+    element.ref.setVisible(false);
+}
+
 $(document).ready(
     function () {
         "use strict";
+        // inicializa el mapa
         google.maps.event.addDomListener(window, 'load', initialize);
-        var opciones = $("#map-selector-distrito li"), botonSatelite = $("#btn-satellite"), botonRoadmap = $("#btn-roadmap"), opcionDistritoSeleccionada = 0, distritos;
+        var opcionesSector = $("#dropdown-menu-distrito li"),
+            opcionesCategorias = $("#dropdown-menu-categoria li > input[type=checkbox]"),
+            botonSatelite = $("#btn-satellite"),
+            botonRoadmap = $("#btn-roadmap"),
+            sectorActual = 0,
+            distritos;
 
-        google.maps.event.addDomListener(opciones[0], 'click', function () {
-            mascaraDistrito.setMap(null);
-            map.panTo(new google.maps.LatLng($(opciones[0]).data("centerx"), $(this).data("centery")));
-            if (distritoSeleccionado !== 0) {
-                $(this).addClass("selected");
-                $(opciones[opcionDistritoSeleccionada]).removeClass("selected");
-                var type, i;
-                for (type = 1; type < 7; type += 1) {
-                    for (i = 0; i < marcadores[type].length; i += 1) {
-                        marcadores[type][i].setVisible(true);
-                    }
-                }
-                distritoSeleccionado = 0;
-                opcionDistritoSeleccionada = 0;
-            }
-
-        });
-        distritos = opciones.slice(2);
-
-        distritos.each(function (index) {
-
-            google.maps.event.addDomListener(this, 'click', function () {
-
-                map.panTo(new google.maps.LatLng($(this).data("centerx"), $(this).data("centery")));
-                $(this).addClass("selected");
-                $(opciones[opcionDistritoSeleccionada]).removeClass("selected");
-                if (distritoSeleccionado !== index + 1) {
-                    var zoomActual = map.getZoom(),
-                        type,
-                        i;
-                    mascaraDistrito.setMap(null);
-                    mascaraDistrito = new google.maps.Data();
-                    mascaraDistrito.loadGeoJson('geometry/' + $(this).data("distrito") + '.geojson');
-                    mascaraDistrito.setMap(map);
-
-
-                    infoWindow.close();
-                    if (distritoSeleccionado === 0) {
-                        for (type = 1; type < 7; type += 1) {
-                            if (type !== index + 1) {
-                                for (i = 0; i < marcadores[type].length; i += 1) {
-                                    marcadores[type][i].setVisible(false);
-                                }
-                            }
-                        }
-                    } else {
-                        for (i = 0; i < marcadores[distritoSeleccionado].length; i += 1) {
-                            marcadores[distritoSeleccionado][i].setVisible(false);
-                        }
-                        for (i = 0; i < marcadores[index + 1].length; i += 1) {
-                            marcadores[index + 1][i].setVisible(true);
-                        }
-                    }
-                    distritoSeleccionado = index + 1;
-                    opcionDistritoSeleccionada = index + 2;
-                }
-                //map.setZoom(zoomActual);
-                
-
-            });
-
-        });
-
+        /*
+            CONTROLES PARA EL MAPA
+        */
+        // BOTON PARA ACTIVAR VISTA DE SATELITE
         google.maps.event.addDomListener(botonSatelite[0], 'click', function () {
             map.setMapTypeId('hybrid');
             $(this).addClass('active');
             botonRoadmap.removeClass('active');
         });
+        // BOTON PARA ACTIVAR VISTA DE MAPA
         google.maps.event.addDomListener(botonRoadmap[0], 'click', function () {
             map.setMapTypeId('roadmap');
             $(this).addClass('active');
             botonSatelite.removeClass('active');
         });
-        $('#dropdown-menu-categorias').click(function (event) {
+        // EVITE QUE SE CIERRE EL MENU DE CATEGORIAS AL SELECCIONAR ALGUNA
+        $('#dropdown-menu-categoria').click(function (event) {
             event.stopPropagation();
+        });
+
+        google.maps.event.addDomListener(opcionesSector[0], 'click', function () {
+            if (sectorActual !== 0) {
+                alert(sectorActual);
+                var sectorAnterior = sectorActual + 1;
+                sectorActual = 0;
+                
+                $(opcionesSector[sectorAnterior]).removeClass("selected");
+                $(this).addClass("selected");
+                map.panTo(new google.maps.LatLng($(this).data("centerx"), $(this).data("centery")));
+                mascaraDistrito.setMap(null);
+                
+                
+
+                // TODO: DISMINUIR LOS CONTADORES DEL SECTOR ANTERIOR
+                marcadoresDistritos[sectorAnterior - 1].forEach(disminuiryOcultar);
+                
+                // TODO: DISMINUIR EL CIRTERIO DE FILTRADO
+                valorFiltro = 1;
+                
+                // TODO: VERIFICAR CUALES DEBEN MOSTRARSE
+                marcadores.forEach(mostrarTodo);
+            }
+
+        });
+        // selecciona las opciones que corresponden unicamente a distritos
+        distritos = opcionesSector.slice(2);
+
+        distritos.each(function (index) {
+
+            google.maps.event.addDomListener(this, 'click', function () {
+                if (sectorActual !== index + 1) {
+                    
+                    var sectorAnterior = (sectorActual) ? sectorActual + 1 : 0;
+                    sectorActual = index + 1;
+                    
+                    $(this).addClass("selected");
+                    $(opcionesSector[sectorAnterior]).removeClass("selected");
+                    map.panTo(new google.maps.LatLng($(this).data("centerx"), $(this).data("centery")));
+                    mascaraDistrito.setMap(null);
+                    
+                    mascaraDistrito = new google.maps.Data();
+                    mascaraDistrito.loadGeoJson('geometry/' + $(this).data("distrito") + '.geojson');
+                    mascaraDistrito.setMap(map);
+
+                    infoWindow.close();
+                    if (sectorAnterior === 0) {
+                        marcadores.forEach(ocultarTodo);
+                        valorFiltro = 2;
+                    } else {
+                        marcadoresDistritos[sectorAnterior - 1].forEach(disminuiryOcultar);
+                    }
+                    // TODO: AUMENTAR LOS CONTADORES DEL SECTOR Y VERIFICAR SI DEBEN MOSTRARSE
+                    marcadoresDistritos[sectorActual].forEach(aumentaryMostrar);
+
+                }
+
+            });
+
+        });
+        
+        opcionesCategorias.each(function (index) {
+
+            google.maps.event.addDomListener(this, 'change', function () {
+                if (this.checked) {
+                    // AUMENTAR LOS CONTADORES DEL SECTOR Y VERIFICAR SI DEBEN MOSTRARSE
+                    marcadoresCategorias[index].forEach(aumentaryMostrar);
+                } else {
+                    // OCULTAR TODOS LOS DE LA CATEGORIA Y DISMINUIR SU CONTADOR
+                    marcadoresCategorias[index].forEach(disminuiryOcultar);
+                }
+            });
+
         });
 
     }

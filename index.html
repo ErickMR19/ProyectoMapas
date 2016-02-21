@@ -2,14 +2,15 @@
 <html>
 
 <head>
+   <title>PUNTOS DE INTERÉS - SANTA ANA</title>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="img/favicon.png" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link type="text/css" href="css/basic.css" rel="stylesheet" media="screen" />
 
     <style type="text/css">
@@ -52,24 +53,14 @@
 
         input[type=checkbox] + label
         {
-            background: #DDD;
             height: 19px;
             width: 19px;
             display:inline-block;
             padding: 0px 0px 0px 0px;
             margin: 0px 0px 0px 0px;
-            color: #AAA;
             cursor: pointer;
         }
-        input[type=checkbox]:checked + label
-        {
-            background: #0080FF;
-            height: 19px;
-            width: 19px;
-            display:inline-block;
-            padding: 0 0 0 0px;
-            color: red;
-        }
+        
         label > span{
             white-space: nowrap;
             display: inline-block;
@@ -78,56 +69,126 @@
             font-size: 14px;
             font-weight: 400;
         }
-
+        
+        input[type=checkbox] + label
+        {
+            color: #AAAAAA;
+        }
+        
+        input[type=checkbox] + label > span
+        {
+            text-decoration: line-through;
+        }
+        
+        ul#dropdown-menu-categoria > li:hover
+        {
+            background-color: #CCCCCC;
+        }
+        
+        ul#dropdown-menu-categoria > li:hover span
+        {
+            text-decoration: none;
+            color: black;
+            min-width: 125px;
+        }
+        
+        input[type=checkbox]:checked + label > span
+        {
+            text-decoration: none;
+        }
+        
+        /******************************************************/
+        /* CULTURA */
+        input[type=checkbox]#cultura + label
+        {
+            background: url("img/icons/cultura-d.png");
+        }
         input[type=checkbox]#cultura:checked + label
         {
-            background: #80215C;
+            background: url("img/icons/cultura.png");
             color: #80215C;
         }
         
+        /* DEPORTE */
+        input[type=checkbox]#deportes + label
+        {
+            background: url("img/icons/deporte-d.png");
+        }        
         input[type=checkbox]#deportes:checked + label
         {
-            background: #F91;
-            color: #F91;
+            background: url("img/icons/deporte.png");
+            color: #FF9911;
         }
         
+        /* EDUCACION */
+        input[type=checkbox]#educacion + label
+        {
+            background: url("img/icons/educacion-d.png");
+        }
         input[type=checkbox]#educacion:checked + label
         {
-            background: #00F;
-            color: #00F;
+            background: url("img/icons/educacion.png");
+            color: #0000FF;
         }
         
+        /* SALUD */
+        input[type=checkbox]#salud + label
+        {
+            background: url("img/icons/salud-d.png");
+        }
         input[type=checkbox]#salud:checked + label
         {
-            background: #F00;
+            background: url("img/icons/salud.png");
             color: #F00;
         }
         
+        /* BANCOS */
+        input[type=checkbox]#bancos + label
+        {
+            background: url("img/icons/dinero-d.png");
+        }
         input[type=checkbox]#bancos:checked + label
         {
-            background: #4D3;
-            color: #4D3;
+            background: url("img/icons/dinero.png");
+            color: #30A000;
         }
         
+        /* RESTAURANTES */
+        input[type=checkbox]#restaurantes + label
+        {
+            background: url("img/icons/restaurantes-d.png");
+        }
         input[type=checkbox]#restaurantes:checked + label
         {
-            background: #A09933;
+            background: url("img/icons/restaurantes.png");
             color: #A09933;
         }
         
+        /* SERVICIOS PUBLICOS */
+        input[type=checkbox]#servicios-publicos + label
+        {
+            background: url("img/icons/spublicos-d.png");
+        }
         input[type=checkbox]#servicios-publicos:checked + label
         {
-            background: #4AF;
-            color: #4AF;
+            background: url("img/icons/spublicos.png");
+            color: #44AAFF;
         }
         
+        /* AUTOMOTRIZ */
+        input[type=checkbox]#automotriz + label
+        {
+            background: url("img/icons/automotriz-d.png");
+        }
         input[type=checkbox]#automotriz:checked + label
         {
-            background: #444;
-            color: #444;
+            background: url("img/icons/automotriz.png");
+            color: #444444;
         }
+        /*********************************************/
+        /*********************************************/
         
-        ul#map-selector-distrito li.selected{
+        ul#dropdown-menu-distrito li.selected{
           background-color: #999;
         }
     </style>
@@ -153,7 +214,7 @@
                 Sector
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="buttonSector" id="map-selector-distrito">
+            <ul class="dropdown-menu" aria-labelledby="buttonSector" id="dropdown-menu-distrito">
                 <li data-distrito="noseleccion" data-centerx="9.929962" data-centery="-84.174285" class="selected"><a href="#">TODO EL CANTÓN</a></li>
                 <li role="separator" class="divider"></li>
                 <li data-distrito="santaana" data-centerx="9.929962" data-centery="-84.174285" data-zoom="15">Santa Ana Centro</li>
@@ -169,7 +230,7 @@
                 Categorías
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" id="dropdown-menu-categorias" aria-labelledby="buttonCategorias">
+            <ul class="dropdown-menu" id="dropdown-menu-categoria" aria-labelledby="buttonCategorias">
                 <li> <input type="checkbox" checked="1" id="cultura"/> <label for="cultura"><span>Cultura</span> </label> </li>
                 <li> <input type="checkbox" checked="1" id="deportes"/> <label for="deportes"><span>Deportes</span> </label> </li>
                 <li> <input type="checkbox" checked="1" id="educacion"/> <label for="educacion"><span>Educación</span> </label> </li>
@@ -181,8 +242,8 @@
             </ul>
         </div>
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" id="btn-zoom-plus">+</button>
-            <button type="button" class="btn btn-default" id="btn-zoom-minus">-</button>
+            <button type="button" class="btn btn-default" id="btn-zoom-plus"> <i class="fa fa-search-plus"></i> </button>
+            <button type="button" class="btn btn-default" id="btn-zoom-minus"> <i class="fa fa-search-minus"></i> </button>
         </div>
     </div>
 
@@ -201,6 +262,14 @@
     <!-- preload the images -->
     <div style="display:none">
         <img src="img/x.png" alt="" />
+        <img src="img/icons/cultura-d.png" alt="" />
+        <img src="img/icons/deporte-d.png" alt="" />
+        <img src="img/icons/educacion-d.png" alt="" />
+        <img src="img/icons/salud-d.png" alt="" />
+        <img src="img/icons/dinero-d.png" alt="" />
+        <img src="img/icons/restaurantes-d.png" alt="" />
+        <img src="img/icons/spublicos-d.png" alt="" />
+        <img src="img/icons/automotriz-d.png" alt="" />
     </div>
     <!-- Load jQuery, SimpleModal and Basic JS files -->
     <script type="text/javascript" src="js/jquery.simplemodal.1.4.4.min.js"></script>
