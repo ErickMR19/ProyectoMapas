@@ -248,7 +248,7 @@ $(document).ready(
         // inicializa el mapa
         google.maps.event.addDomListener(window, 'load', initialize);
         var opcionesSector = $("#dropdown-menu-distrito li"),
-            opcionesCategorias = $("#dropdown-menu-categoria li > input[type=checkbox]"),
+            opcionesCategorias = $("#dropdown-menu-categoria li > input[type=radio]"),
             botonSatelite = $("#btn-satellite"),
             botonRoadmap = $("#btn-roadmap"),
             sectorActual = 0,
@@ -276,7 +276,6 @@ $(document).ready(
 
         google.maps.event.addDomListener(opcionesSector[0], 'click', function () {
             if (sectorActual !== 0) {
-                alert(sectorActual);
                 var sectorAnterior = sectorActual + 1;
                 sectorActual = 0;
                 
@@ -333,17 +332,26 @@ $(document).ready(
             });
 
         });
+        var categoriaActual = -1, ulcategorias = $("ul#dropdown-menu-categoria") 
         
         opcionesCategorias.each(function (index) {
 
             google.maps.event.addDomListener(this, 'change', function () {
-                if (this.checked) {
-                    // AUMENTAR LOS CONTADORES DEL SECTOR Y VERIFICAR SI DEBEN MOSTRARSE
-                    marcadoresCategorias[index].forEach(aumentaryMostrar);
+                var categoriaSeleccionada = index - 1;
+                if (categoriaActual === -1) {
+                    marcadores.forEach(disminuiryOcultar);
                 } else {
-                    // OCULTAR TODOS LOS DE LA CATEGORIA Y DISMINUIR SU CONTADOR
-                    marcadoresCategorias[index].forEach(disminuiryOcultar);
+                    marcadoresCategorias[categoriaActual].forEach(disminuiryOcultar);
                 }
+                    
+                if (categoriaSeleccionada === -1) {
+                    marcadores.forEach(aumentaryMostrar);
+                    ulcategorias.addClass('allactive');
+                } else {
+                    marcadoresCategorias[categoriaSeleccionada].forEach(aumentaryMostrar);
+                    ulcategorias.removeClass('allactive');
+                }
+                categoriaActual = categoriaSeleccionada;
             });
 
         });

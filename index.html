@@ -47,11 +47,11 @@
         }
 
         
-        input[type=checkbox] {
+        input[type=radio] {
             display:none;
         }
 
-        input[type=checkbox] + label
+        input[type=radio] + label
         {
             height: 19px;
             width: 19px;
@@ -70,16 +70,11 @@
             font-weight: 400;
         }
         
-        input[type=checkbox] + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]:not(:checked) + label
         {
             color: #AAAAAA;
         }
-        
-        input[type=checkbox] + label > span
-        {
-            text-decoration: line-through;
-        }
-        
+    
         ul#dropdown-menu-categoria > li:hover
         {
             background-color: #CCCCCC;
@@ -92,95 +87,96 @@
             min-width: 125px;
         }
         
-        input[type=checkbox]:checked + label > span
+        input[type=radio]:checked + label > span
         {
             text-decoration: none;
         }
         
         /******************************************************/
         /* CULTURA */
-        input[type=checkbox]#cultura + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#cultura:not(:checked) + label
         {
             background: url("img/icons/cultura-d.png");
         }
-        input[type=checkbox]#cultura:checked + label
+        input[type=radio]#cultura + label
         {
             background: url("img/icons/cultura.png");
             color: #80215C;
         }
+     
         
         /* DEPORTE */
-        input[type=checkbox]#deportes + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#deportes:not(:checked) + label
         {
             background: url("img/icons/deporte-d.png");
         }        
-        input[type=checkbox]#deportes:checked + label
+        input[type=radio]#deportes + label
         {
             background: url("img/icons/deporte.png");
             color: #FF9911;
         }
         
         /* EDUCACION */
-        input[type=checkbox]#educacion + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#educacion:not(:checked) + label
         {
             background: url("img/icons/educacion-d.png");
         }
-        input[type=checkbox]#educacion:checked + label
+        input[type=radio]#educacion + label
         {
             background: url("img/icons/educacion.png");
             color: #0000FF;
         }
         
         /* SALUD */
-        input[type=checkbox]#salud + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#salud:not(:checked) + label
         {
             background: url("img/icons/salud-d.png");
         }
-        input[type=checkbox]#salud:checked + label
+        input[type=radio]#salud + label
         {
             background: url("img/icons/salud.png");
             color: #F00;
         }
         
         /* BANCOS */
-        input[type=checkbox]#bancos + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#bancos:not(:checked) + label
         {
             background: url("img/icons/dinero-d.png");
         }
-        input[type=checkbox]#bancos:checked + label
+        input[type=radio]#bancos + label
         {
             background: url("img/icons/dinero.png");
             color: #30A000;
         }
         
         /* RESTAURANTES */
-        input[type=checkbox]#restaurantes + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#restaurantes:not(:checked) + label
         {
             background: url("img/icons/restaurantes-d.png");
         }
-        input[type=checkbox]#restaurantes:checked + label
+        input[type=radio]#restaurantes + label
         {
             background: url("img/icons/restaurantes.png");
             color: #A09933;
         }
         
         /* SERVICIOS PUBLICOS */
-        input[type=checkbox]#servicios-publicos + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#servicios-publicos:not(:checked) + label
         {
             background: url("img/icons/spublicos-d.png");
         }
-        input[type=checkbox]#servicios-publicos:checked + label
+        input[type=radio]#servicios-publicos + label
         {
             background: url("img/icons/spublicos.png");
             color: #44AAFF;
         }
         
         /* AUTOMOTRIZ */
-        input[type=checkbox]#automotriz + label
+        ul#dropdown-menu-categoria:not(.allactive) input[type=radio]#automotriz:not(:checked) + label
         {
             background: url("img/icons/automotriz-d.png");
         }
-        input[type=checkbox]#automotriz:checked + label
+        input[type=radio]#automotriz + label
         {
             background: url("img/icons/automotriz.png");
             color: #444444;
@@ -211,7 +207,7 @@
         </div>
         <div class="dropup btn-group" role="group" title="Seleccionar un distrito">
             <button class="btn btn-default dropdown-toggle" type="button" id="buttonSector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Sector
+                Región
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="buttonSector" id="dropdown-menu-distrito">
@@ -230,15 +226,16 @@
                 Categorías
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" id="dropdown-menu-categoria" aria-labelledby="buttonCategorias">
-                <li> <input type="checkbox" checked="1" id="cultura"/> <label for="cultura"><span>Cultura</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="deportes"/> <label for="deportes"><span>Deportes</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="educacion"/> <label for="educacion"><span>Educación</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="salud"/> <label for="salud"><span>Salud</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="bancos"/> <label for="bancos"><span>Bancos</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="restaurantes"/> <label for="restaurantes"><span>Restaurantes</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="servicios-publicos"/> <label for="servicios-publicos"><span>Servicios Públicos</span> </label> </li>
-                <li> <input type="checkbox" checked="1" id="automotriz"/> <label for="automotriz"><span>Automotriz</span> </label> </li>
+            <ul class="dropdown-menu allactive" id="dropdown-menu-categoria" aria-labelledby="buttonCategorias">
+                <li> <input type="radio" checked="1" id="todos" name="types"/> <label for="todos"><span>TODO</span> </label> </li>
+                <li> <input type="radio"  id="cultura" name="types"/> <label for="cultura"><span>Cultura</span> </label> </li>
+                <li> <input type="radio"  id="deportes" name="types"/> <label for="deportes"><span>Deportes</span> </label> </li>
+                <li> <input type="radio"  id="educacion" name="types"/> <label for="educacion"><span>Educación</span> </label> </li>
+                <li> <input type="radio"  id="salud" name="types"/> <label for="salud"><span>Salud</span> </label> </li>
+                <li> <input type="radio"  id="bancos" name="types"/> <label for="bancos"><span>Bancos</span> </label> </li>
+                <li> <input type="radio"  id="restaurantes" name="types"/> <label for="restaurantes"><span>Restaurantes</span> </label> </li>
+                <li> <input type="radio"  id="servicios-publicos" name="types"/> <label for="servicios-publicos"><span>Servicios Públicos</span> </label> </li>
+                <li> <input type="radio"  id="automotriz" name="types"/> <label for="automotriz"><span>Automotriz</span> </label> </li>
             </ul>
         </div>
         <div class="btn-group" role="group">
@@ -251,7 +248,7 @@
     <!-- modal content -->
     <div id="basic-modal-content">
         <div>
-            <a href="http://www.ucr.ac.cr" target="_blank"><img src="img/ucr.gif" width="32%" /></a>
+            <a href="http://www.ucr.ac.cr" target="_blank"><img src="img/ucr.png" width="32%" /></a>
             <a href="https://santaana.go.cr" target="_blank"><img src="img/santaana.png" width="32%" /></a>
             <a href="https://www.facebook.com/bibliotecapublicadesantaana" target="_blank"><img src="img/bpsa.png" width="32%" /></a>
         </div>
