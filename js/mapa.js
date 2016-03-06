@@ -172,7 +172,7 @@ function initialize() {
 
     infoWindow = new google.maps.InfoWindow();
     /*global alert*/
-    $.ajax("backend/datosmapa.php")
+    $.ajax("http://localhost:8000/ubicaciones/json")
         .done(function (data) {
             var imageMarker = [ "img/markers/markercultura.png",
                                 "img/markers/markerdeporte.png",
@@ -191,7 +191,6 @@ function initialize() {
                     map: map,
                     position: point,
                     title: this.nombre,
-                    //label: label,
                     icon: imageMarker[this.categoria]
                 });
                 marcadores[index] = {
